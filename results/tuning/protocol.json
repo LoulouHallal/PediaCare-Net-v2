@@ -1,0 +1,127 @@
+{
+  "study": "gru_vs_tsl_hyperparameter_tuning",
+  "arms": [
+    "gru_ta",
+    "tsl_gru"
+  ],
+  "fixed": {
+    "hidden": 64,
+    "layers": 2,
+    "optimizer": "adam",
+    "scheduler": "ReduceLROnPlateau(mode=max, factor=0.5, patience=3)",
+    "loss": "weighted_bce",
+    "endpoint": "any",
+    "tag": "stride6",
+    "search_epochs": 20,
+    "search_patience": 5,
+    "confirm_epochs": 40,
+    "confirm_patience": 6
+  },
+  "space": {
+    "lr": {
+      "type": "loguniform",
+      "low": 0.0003,
+      "high": 0.003
+    },
+    "dropout": {
+      "type": "uniform",
+      "low": 0.0,
+      "high": 0.4
+    },
+    "batch": {
+      "type": "choice",
+      "values": [
+        256,
+        512,
+        1024
+      ]
+    },
+    "weight_decay": {
+      "type": "loguniform",
+      "low": 1e-06,
+      "high": 0.001
+    }
+  },
+  "n_trials": 8,
+  "trial_0_is_incumbent": true,
+  "shared_configs": true,
+  "search_seed": 42,
+  "sampler_seed": 20260831,
+  "confirmation_seeds": [
+    43,
+    44,
+    45
+  ],
+  "selection_metric": "per_subject_mean_auprc_validation",
+  "decision_threshold": 0.003,
+  "noise_floor_measured": 0.00207,
+  "test_set": "SEALED -- not used in this study",
+  "outcomes": {
+    "tsl_better": "mean paired delta >= +0.003 on confirmation seeds",
+    "equivalent": "|mean paired delta| < 0.003; existing efficiency claim stands unchanged",
+    "tsl_worse": "mean paired delta <= -0.003; reported as such",
+    "both_improve": "if tuning lifts both arms, the finding is that the original fixed settings were suboptimal for both, not that either architecture won"
+  },
+  "reporting_commitment": "All 16 search trials and all 6 confirmation runs are reported regardless of outcome. No run is dropped after the fact.",
+  "configs": [
+    {
+      "lr": 0.001,
+      "dropout": 0.2,
+      "batch": 512,
+      "weight_decay": 0.0,
+      "trial": 0,
+      "note": "current fixed settings, included so the search can be judged against the status quo"
+    },
+    {
+      "lr": 0.00043558845534058185,
+      "dropout": 0.2574084166042643,
+      "batch": 256,
+      "weight_decay": 0.0003534756196778213,
+      "trial": 1
+    },
+    {
+      "lr": 0.000946499038451197,
+      "dropout": 0.39349576564861266,
+      "batch": 1024,
+      "weight_decay": 0.00013947257785675533,
+      "trial": 2
+    },
+    {
+      "lr": 0.0012426595152793482,
+      "dropout": 0.13817429182517316,
+      "batch": 1024,
+      "weight_decay": 6.1021599834340954e-05,
+      "trial": 3
+    },
+    {
+      "lr": 0.000620961195752153,
+      "dropout": 0.39523670415017254,
+      "batch": 512,
+      "weight_decay": 1.6455283252742935e-06,
+      "trial": 4
+    },
+    {
+      "lr": 0.0026199127858070204,
+      "dropout": 0.1302737896899415,
+      "batch": 256,
+      "weight_decay": 1.314007878317141e-05,
+      "trial": 5
+    },
+    {
+      "lr": 0.0005672396077555824,
+      "dropout": 0.05759529205660022,
+      "batch": 256,
+      "weight_decay": 0.00014444989287654974,
+      "trial": 6
+    },
+    {
+      "lr": 0.002201314450671158,
+      "dropout": 0.1494451693838997,
+      "batch": 512,
+      "weight_decay": 1.6988001526727872e-05,
+      "trial": 7
+    }
+  ],
+  "written_at": "2026-08-31T09:29:21",
+  "sha256": "df68a1be717da230"
+}

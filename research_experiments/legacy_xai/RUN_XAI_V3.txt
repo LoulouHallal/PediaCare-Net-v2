@@ -1,0 +1,49 @@
+PediaCare-Net v2 — corrected XAI v3
+====================================
+
+FILES TO PUT IN:
+  /content/drive/MyDrive/PediaCare-Net-v2/src/
+
+  xai_engine_v3.py
+  run_xai_v3.py
+
+1) PREFLIGHT (fast; do this first)
+----------------------------------
+%cd /content/drive/MyDrive/PediaCare-Net-v2/src
+!python run_xai_v3.py --models tsl_gru --horizon 30 --check_only
+
+Expected behavior:
+- checkpoint loads
+- probability distribution is printed with varying min/median/max
+- selected cases show different subject IDs
+- exits before Integrated Gradients/counterfactuals
+
+2) SMOKE TEST (small real run)
+-------------------------------
+!python run_xai_v3.py --models tsl_gru --horizon 30 \
+  --n_pop 20 --n_case 3 --n_heatmaps 3 \
+  --ig_steps 8 --n_iter 30 --n_cf 4
+
+3) FULL THESIS RUN
+-------------------
+!python run_xai_v3.py --models tsl_gru --horizon 30 \
+  --n_pop 2000 --n_case 12 --n_heatmaps 6 \
+  --ig_steps 50 --n_iter 200 --n_cf 6
+
+DEFAULT OUTPUT:
+  /content/drive/MyDrive/PediaCare-Net-v2/results/RQ3_xai_v3/h30_tsl_gru/
+
+FILES CREATED:
+  xai_results_v3.json
+  case_explanations.csv
+  plots/population_attribution.png
+  plots/cf_quality.png
+  plots/heatmap_tsl_gru_rankXX_subject_...png
+
+IMPORTANT:
+- v3 uses the model's direct probability output; it does NOT apply a second sigmoid.
+- case explanations use one highest-risk window per unique patient.
+- figure labels use clinical names such as "Rate of glucose fall" and
+  "Proximity to 70 mg/dL" rather than internal feature names.
+- counterfactuals are model-based what-if sensitivity analyses, not causal
+  treatment recommendations.

@@ -1,0 +1,209 @@
+
+==============================================================================
+HORIZON 15 min   n=453,480  prevalence any 4.927%  consensus 1.435%
+==============================================================================
+
+-- how much of the error is structural? --
+  FP: 8,069 windows wrong in >=1 seed, 4,893 in >=4/5 (60.6% structural)
+     by seed count 0:423,040 1:1,370 2:917 3:889 4:1,012 5:3,881
+  FN: 4,310 windows wrong in >=1 seed, 2,945 in >=4/5 (68.3% structural)
+     by seed count 0:18,061 1:621 2:410 3:334 4:395 5:2,550
+
+-- legacy vs consensus endpoint --
+  stable FP (n=4,893) that are consensus-POSITIVE: 0.0%   <- if high, these 'errors' are real episodes the legacy label happened to agree with
+  stable FN (n=2,945) that are consensus-POSITIVE: 70.7%   <- if high, these are clinically real misses
+  stable FP that are consensus-NEGATIVE: 100.0%   <- transient dips; not events under the primary endpoint
+  stable FP max-run distribution: 0:100.0%, 1:0.0%, 2:0.0%, 3:0.0%, >=4:0.0%
+  pooled AUPRC of the SAME predictions: any 0.9025 (prev 4.927%)  consensus 0.1268 (prev 1.435%)
+  NOT comparable to each other -- different prevalence.
+
+A. by current glucose
+glu_bin      n  n_pos  FP_rate  FN_rate  mean_prob  seed_sd
+    <80  39177  19138   0.2085   0.0769     0.7787   0.0373
+  80-99  73118   2689   0.0172   0.5444     0.1934   0.0347
+100-119  79226    432   0.0016   0.7639     0.0388   0.0111
+120-149  94786     88   0.0004   0.7841     0.0090   0.0034
+  >=150 167173     24   0.0000   0.8750     0.0013   0.0006
+
+B. by recent slope
+    slope_bin      n  n_pos  FP_rate  FN_rate  mean_prob  seed_sd
+   rapid fall 103150  11228   0.0303   0.1179     0.2066   0.0164
+moderate fall  84766   5544   0.0162   0.1457     0.1387   0.0136
+       stable  78154   3160   0.0103   0.1737     0.0994   0.0125
+       rising 187410   2439   0.0039   0.2763     0.0425   0.0078
+
+C. by future nadir
+nadir_bin      n  n_pos  FP_rate  FN_rate  mean_prob  seed_sd
+      <54   3734   3734      NaN   0.0423     0.9820   0.0037
+    54-69  18637  18637      NaN   0.1715     0.9307   0.0162
+    70-79  26637      0   0.1897      NaN     0.5954   0.0618
+    80-99  77730      0   0.0061      NaN     0.1302   0.0330
+    >=100 326742      0   0.0001      NaN     0.0055   0.0023
+
+D. by max consecutive readings <70 (consensus needs >=3)
+run_bin      n  n_pos  FP_rate  FN_rate  mean_prob  seed_sd
+      0 431109      0   0.0129      NaN     0.0644   0.0115
+      1   6254   6254      NaN   0.3756     0.8472   0.0304
+      2   5255   5255      NaN   0.1549     0.9424   0.0158
+      3  10862  10862      NaN   0.0177     0.9908   0.0038
+
+  2 vs 3 consecutive: mean prob 0.9424 vs 0.9908  (separation +0.0484)
+  Under the LEGACY label both are positive, so the model has no reason to separate them. Under CONSENSUS only 3+ is positive. A small separation here means persistence supervision has something to add; a large one means the model already encodes it.
+
+==============================================================================
+HORIZON 30 min   n=453,480  prevalence any 6.781%  consensus 2.891%
+==============================================================================
+
+-- how much of the error is structural? --
+  FP: 32,156 windows wrong in >=1 seed, 22,403 in >=4/5 (69.7% structural)
+     by seed count 0:390,537 1:4,300 2:2,817 3:2,636 4:3,151 5:19,252
+  FN: 5,696 windows wrong in >=1 seed, 4,153 in >=4/5 (72.9% structural)
+     by seed count 0:25,091 1:681 2:457 3:405 4:486 5:3,667
+
+-- legacy vs consensus endpoint --
+  stable FP (n=22,403) that are consensus-POSITIVE: 0.0%   <- if high, these 'errors' are real episodes the legacy label happened to agree with
+  stable FN (n=4,153) that are consensus-POSITIVE: 72.5%   <- if high, these are clinically real misses
+  stable FP that are consensus-NEGATIVE: 100.0%   <- transient dips; not events under the primary endpoint
+  stable FP max-run distribution: 0:100.0%, 1:0.0%, 2:0.0%, 3:0.0%, >=4:0.0%
+  pooled AUPRC of the SAME predictions: any 0.8071 (prev 6.781%)  consensus 0.1642 (prev 2.891%)
+  NOT comparable to each other -- different prevalence.
+
+A. by current glucose
+glu_bin      n  n_pos  FP_rate  FN_rate  mean_prob  seed_sd
+    <80  39177  20956   0.5877   0.0248     0.8397   0.0278
+  80-99  73118   6546   0.1526   0.3165     0.3969   0.0424
+100-119  79226   2129   0.0370   0.5500     0.1680   0.0278
+120-149  94786    867   0.0086   0.7163     0.0719   0.0163
+  >=150 167173    289   0.0010   0.8097     0.0170   0.0053
+
+B. by recent slope
+    slope_bin      n  n_pos  FP_rate  FN_rate  mean_prob  seed_sd
+   rapid fall 103150  14691   0.1233   0.0985     0.3245   0.0248
+moderate fall  84766   7265   0.0732   0.1269     0.2233   0.0205
+       stable  78154   4379   0.0494   0.1822     0.1713   0.0190
+       rising 187410   4452   0.0245   0.3259     0.1018   0.0163
+
+C. by future nadir
+nadir_bin      n  n_pos  FP_rate  FN_rate  mean_prob  seed_sd
+      <54   5730   5730      NaN   0.0911     0.9211   0.0112
+    54-69  25057  25057      NaN   0.1635     0.8611   0.0208
+    70-79  31646      0   0.5106      NaN     0.6474   0.0448
+    80-99  83513      0   0.0919      NaN     0.2980   0.0421
+    >=100 307534      0   0.0028      NaN     0.0411   0.0108
+
+D. by max consecutive readings <70 (consensus needs >=3)
+run_bin      n  n_pos  FP_rate  FN_rate  mean_prob  seed_sd
+      0 422693      0   0.0584      NaN     0.1373   0.0195
+      1   6790   6790      NaN   0.3093     0.7644   0.0286
+      2   6378   6378      NaN   0.2306     0.8223   0.0248
+      3   5393   5393      NaN   0.1400     0.8704   0.0214
+    4-6  12226  12226      NaN   0.0239     0.9591   0.0096
+
+  2 vs 3 consecutive: mean prob 0.8223 vs 0.8704  (separation +0.0481)
+  Under the LEGACY label both are positive, so the model has no reason to separate them. Under CONSENSUS only 3+ is positive. A small separation here means persistence supervision has something to add; a large one means the model already encodes it.
+
+==============================================================================
+HORIZON 60 min   n=453,480  prevalence any 10.116%  consensus 5.698%
+==============================================================================
+
+-- how much of the error is structural? --
+  FP: 91,735 windows wrong in >=1 seed, 66,603 in >=4/5 (72.6% structural)
+     by seed count 0:315,818 1:10,773 2:7,312 3:7,047 4:8,712 5:57,891
+  FN: 8,788 windows wrong in >=1 seed, 6,071 in >=4/5 (69.1% structural)
+     by seed count 0:37,139 1:1,168 2:823 3:726 4:902 5:5,169
+
+-- legacy vs consensus endpoint --
+  stable FP (n=66,603) that are consensus-POSITIVE: 0.0%   <- if high, these 'errors' are real episodes the legacy label happened to agree with
+  stable FN (n=6,071) that are consensus-POSITIVE: 73.7%   <- if high, these are clinically real misses
+  stable FP that are consensus-NEGATIVE: 100.0%   <- transient dips; not events under the primary endpoint
+  stable FP max-run distribution: 0:100.0%, 1:0.0%, 2:0.0%, 3:0.0%, >=4:0.0%
+  pooled AUPRC of the SAME predictions: any 0.6992 (prev 10.116%)  consensus 0.2127 (prev 5.698%)
+  NOT comparable to each other -- different prevalence.
+
+A. by current glucose
+glu_bin      n  n_pos  FP_rate  FN_rate  mean_prob  seed_sd
+    <80  39177  22745   0.8806   0.0066     0.8617   0.0222
+  80-99  73118  11546   0.4918   0.1353     0.5405   0.0403
+100-119  79226   5857   0.2131   0.3275     0.3305   0.0381
+120-149  94786   3574   0.0977   0.4868     0.2078   0.0324
+  >=150 167173   2205   0.0204   0.6893     0.0890   0.0194
+
+B. by recent slope
+    slope_bin      n  n_pos  FP_rate  FN_rate  mean_prob  seed_sd
+   rapid fall 103150  19799   0.3215   0.0845     0.4561   0.0329
+moderate fall  84766  10106   0.2035   0.1241     0.3266   0.0293
+       stable  78154   6710   0.1565   0.1818     0.2652   0.0275
+       rising 187410   9312   0.1094   0.2944     0.2059   0.0273
+
+C. by future nadir
+nadir_bin      n  n_pos  FP_rate  FN_rate  mean_prob  seed_sd
+      <54   9455   9455      NaN   0.1225     0.8299   0.0195
+    54-69  36472  36472      NaN   0.1571     0.7781   0.0258
+    70-79  40130      0   0.7039      NaN     0.6294   0.0390
+    80-99  91967      0   0.3477      NaN     0.4058   0.0419
+    >=100 275456      0   0.0451      NaN     0.1279   0.0240
+
+D. by max consecutive readings <70 (consensus needs >=3)
+run_bin      n  n_pos  FP_rate  FN_rate  mean_prob  seed_sd
+      0 407553      0   0.1783      NaN     0.2400   0.0295
+      1   7676   7676      NaN   0.2496     0.7119   0.0292
+      2   7878   7878      NaN   0.2096     0.7400   0.0272
+      3   7478   7478      NaN   0.1894     0.7532   0.0271
+    4-6  14625  14625      NaN   0.1186     0.8033   0.0247
+     >6   8270   8270      NaN   0.0208     0.9132   0.0145
+
+  2 vs 3 consecutive: mean prob 0.7400 vs 0.7532  (separation +0.0132)
+  Under the LEGACY label both are positive, so the model has no reason to separate them. Under CONSENSUS only 3+ is positive. A small separation here means persistence supervision has something to add; a large one means the model already encodes it.
+
+==============================================================================
+HORIZON 120 min   n=453,480  prevalence any 15.861%  consensus 10.694%
+==============================================================================
+
+-- how much of the error is structural? --
+  FP: 165,519 windows wrong in >=1 seed, 122,762 in >=4/5 (74.2% structural)
+     by seed count 0:215,950 1:17,623 2:12,902 3:12,232 4:15,582 5:107,180
+  FN: 14,435 windows wrong in >=1 seed, 9,237 in >=4/5 (64.0% structural)
+     by seed count 0:57,576 1:2,371 2:1,452 3:1,375 4:1,585 5:7,652
+
+-- legacy vs consensus endpoint --
+  stable FP (n=122,762) that are consensus-POSITIVE: 0.0%   <- if high, these 'errors' are real episodes the legacy label happened to agree with
+  stable FN (n=9,237) that are consensus-POSITIVE: 73.4%   <- if high, these are clinically real misses
+  stable FP that are consensus-NEGATIVE: 100.0%   <- transient dips; not events under the primary endpoint
+  stable FP max-run distribution: 0:100.0%, 1:0.0%, 2:0.0%, 3:0.0%, >=4:0.0%
+  pooled AUPRC of the SAME predictions: any 0.6262 (prev 15.861%)  consensus 0.2860 (prev 10.694%)
+  NOT comparable to each other -- different prevalence.
+
+A. by current glucose
+glu_bin      n  n_pos  FP_rate  FN_rate  mean_prob  seed_sd
+    <80  39177  24966   0.9745   0.0015     0.8632   0.0203
+  80-99  73118  17641   0.7649   0.0529     0.6060   0.0359
+100-119  79226  11318   0.4637   0.1859     0.4531   0.0415
+120-149  94786   9203   0.2988   0.3145     0.3535   0.0443
+  >=150 167173   8883   0.1227   0.5438     0.2368   0.0406
+
+B. by recent slope
+    slope_bin      n  n_pos  FP_rate  FN_rate  mean_prob  seed_sd
+   rapid fall 103150  27235   0.5566   0.0736     0.5602   0.0394
+moderate fall  84766  14884   0.3666   0.1286     0.4320   0.0402
+       stable  78154  10601   0.2959   0.1822     0.3701   0.0378
+       rising 187410  19291   0.2671   0.2567     0.3404   0.0388
+
+C. by future nadir
+nadir_bin      n  n_pos  FP_rate  FN_rate  mean_prob  seed_sd
+      <54  16361  16361      NaN   0.1321     0.7495   0.0264
+    54-69  55650  55650      NaN   0.1553     0.7035   0.0309
+    70-79  52506      0   0.7562      NaN     0.5936   0.0388
+    80-99 101598      0   0.5345      NaN     0.4554   0.0425
+    >=100 227365      0   0.1704      NaN     0.2563   0.0404
+
+D. by max consecutive readings <70 (consensus needs >=3)
+run_bin      n  n_pos  FP_rate  FN_rate  mean_prob  seed_sd
+      0 381469      0   0.3480      NaN     0.3558   0.0408
+      1   9185   9185      NaN   0.2303     0.6588   0.0332
+      2  10318  10318      NaN   0.1911     0.6802   0.0317
+      3  10863  10863      NaN   0.1855     0.6789   0.0317
+    4-6  24317  24317      NaN   0.1449     0.7091   0.0307
+     >6  17328  17328      NaN   0.0679     0.7921   0.0247
+
+  2 vs 3 consecutive: mean prob 0.6802 vs 0.6789  (separation -0.0013)
+  Under the LEGACY label both are positive, so the model has no reason to separate them. Under CONSENSUS only 3+ is positive. A small separation here means persistence supervision has something to add; a large one means the model already encodes it.

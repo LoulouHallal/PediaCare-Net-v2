@@ -1,0 +1,4 @@
+# Minimal dependencies for the dataset-free verification test and CI.
+torch==2.11.0
+numpy==2.1.3
+scikit-learn==1.6.1

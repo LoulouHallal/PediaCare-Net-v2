@@ -1,0 +1,79 @@
+PediaCare-Net v2 — XAI v3.2
+=============================
+
+What changed from v3.1
+----------------------
+1. Uses the model probabilities directly (no double sigmoid).
+2. Recovers the actual validation-selected decision threshold with the same
+   common.find_threshold() policy used by the evaluation pipeline.
+3. A successful counterfactual is now required to:
+   - make a clinically reportable input change,
+   - remain within cohort p99 plausibility bounds, and
+   - CROSS the validation-selected decision threshold.
+4. Risk reductions that do not cross the decision boundary are saved only as
+   partial-sensitivity diagnostics, not as successful counterfactuals.
+5. n_case=0 means ALL validation subjects (one representative window per subject).
+6. Heatmaps remain limited to a small representative subset for readability.
+
+Files to place in /content/drive/MyDrive/PediaCare-Net-v2/src
+-------------------------------------------------------------
+  run_xai_v3_2.py
+  xai_engine_v3_2.py
+
+STEP 1 — Fast preflight
+-----------------------
+%cd /content/drive/MyDrive/PediaCare-Net-v2/src
+!python run_xai_v3_2.py --models tsl_gru --horizon 30 --n_case 0 --check_only
+
+Check that:
+- probabilities vary normally;
+- a validation-selected decision threshold is printed;
+- 36 unique validation subjects are selected (or the actual number reported by the split);
+- there is no 0.731058 double-sigmoid pattern.
+
+STEP 2 — Small smoke test of the new decision-flip logic
+---------------------------------------------------------
+!python run_xai_v3_2.py \
+  --models tsl_gru \
+  --horizon 30 \
+  --n_pop 20 \
+  --n_case 3 \
+  --n_heatmaps 3 \
+  --ig_steps 8 \
+  --n_iter 50 \
+  --n_cf 4
+
+Inspect:
+  results/RQ3_xai_v3_2/h30_tsl_gru/xai_results_v3_2.json
+  results/RQ3_xai_v3_2/h30_tsl_gru/case_explanations.csv
+  results/RQ3_xai_v3_2/h30_tsl_gru/plots/
+
+A successful CF should explicitly say that the prediction crossed the decision threshold.
+A non-flipping reduction should appear only in the diagnostics as a partial sensitivity result.
+
+STEP 3 — Full thesis run (after smoke test is confirmed)
+---------------------------------------------------------
+!python run_xai_v3_2.py \
+  --models tsl_gru \
+  --horizon 30 \
+  --n_pop 2000 \
+  --n_case 0 \
+  --n_heatmaps 6 \
+  --ig_steps 50 \
+  --n_iter 200 \
+  --n_cf 6
+
+Interpretation
+--------------
+Population IG: all 2,000 sampled validation windows.
+Patient-level cases: all validation subjects, one representative window per subject.
+Heatmaps: only 6 representative subjects for thesis readability.
+Counterfactual success: only cohort-plausible changes that flip the model decision.
+Partial sensitivity: meaningful reductions that fail to cross the threshold; these are
+NOT counted as successful counterfactuals.
+
+Scientific caveat
+-----------------
+Counterfactuals are model-based sensitivity analyses. They do not prove that taking
+an insulin/carbohydrate action would causally prevent hypoglycaemia, and they are not
+treatment recommendations.

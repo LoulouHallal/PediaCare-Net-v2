@@ -1,0 +1,16 @@
+# Versions recorded for the final thesis environment where available.
+# For NVIDIA CUDA, install the PyTorch build appropriate for your driver/CUDA
+# stack if the default PyPI wheel is not suitable.
+torch==2.11.0
+numpy==2.1.3
+pandas==2.2.3
+scikit-learn==1.6.1
+imbalanced-learn==0.14.2
+xgboost==3.4.1
+matplotlib==3.10.0
+
+# Required by preprocessing / archived comparison models; exact versions were
+# not frozen in the thesis text, so they are intentionally left unpinned.
+pyarrow
+scipy
+entmax

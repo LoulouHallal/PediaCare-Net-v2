@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this software in academic work, please cite the accompanying Master's thesis and this repository."
+title: "PediaCare-Net v2"
+type: software
+authors:
+  - family-names: "Hallal"
+    given-names: "Loulou Adnan"
+version: "1.0.0"
+date-released: "2026-09-17"
+license: MIT
+abstract: "Reproducibility code for pediatric hypoglycemia prediction, threshold-aware representations, the TSL-GRU recurrent cell, deployment benchmarking, and explainability experiments."
+preferred-citation:
+  type: generic
+  title: "Multi-Layer Early Prediction Framework of Diabetes Type 1 in Children"
+  authors:
+    - family-names: "Hallal"
+      given-names: "Loulou Adnan"
+  year: 2026

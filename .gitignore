@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Notebooks / Colab caches
+.ipynb_checkpoints/
+
+# Raw / restricted / externally supplied datasets
+/data/raw/*
+!/data/raw/.gitkeep
+/data/external/*
+!/data/external/.gitkeep
+
+# Large generated arrays and caches
+/data_derived/
+*.npz
+*.npy
+*.parquet
+
+# Model checkpoints and resumable training state
+*.pt
+*.pth
+*.ckpt
+*.best.ckpt
+
+# Generated XAI plots and transient output
+results/**/plots/
+results/**/*.png
+results/**/*.pdf
+results/**/*.svg
+
+# Local logs / temp
+*.log
+*.tmp
+
+# Private cohort/split references (may contain subject identifiers)
+/data/private_split_reference.json
+/data/*split*private*.json
+
+# Per-subject experiment outputs should remain local unless explicitly cleared
+results/**/*.json
+!results/tuning/protocol.json

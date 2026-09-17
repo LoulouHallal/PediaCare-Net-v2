@@ -1,0 +1,73 @@
+Device: cpu
+  clamped 173,370 extreme feature values to +/-10.0 (0.1914% of cells; normalisation artifact, see BuiltWindows.CLAMP)
+Subject split: train=170 | val=36 | test=38 (total=244)
+  TA channels: c in [0.000,1.000]  v+ in [0.000,10.000]  (126 clipped)
+Subject split: train=170 | val=36 | test=38 (total=244)
+Loaded tsl_gru__weighted_bce__none__any__s44  (kappa = +0.5938)
+Constant lambda from VALIDATION: mean 0.3224  min 0.0010  max 0.9129
+
+Scoring the test set under each condition (410,542 windows each)...
+  normal...
+  constant...
+  shuffled...
+
+################################################################################################
+# INTERVENTION ON A TRAINED CHECKPOINT — identical weights, different retention signal
+################################################################################################
+
+h=15 min
+   condition    AUROC    AUPRC      PPV   Recall       F1
+      normal   0.9926   0.8652   0.7226   0.8276   0.7704
+    constant   0.9895   0.8177   0.6517   0.8339   0.7282
+    shuffled   0.9925   0.8646   0.7228   0.8236   0.7688
+  ------------------------------------------------------------------
+  normal - constant : dAUPRC +0.0476 [+0.0312, +0.0696]*  -> temporal variation MATTERS
+  normal - shuffled : dAUPRC +0.0006 [-0.0007, +0.0017]   -> no evidence it matters
+
+h=30 min
+   condition    AUROC    AUPRC      PPV   Recall       F1
+      normal   0.9726   0.7531   0.4683   0.8211   0.5931
+    constant   0.9658   0.7106   0.3968   0.8348   0.5328
+    shuffled   0.9725   0.7522   0.4675   0.8192   0.5921
+  ------------------------------------------------------------------
+  normal - constant : dAUPRC +0.0425 [+0.0324, +0.0557]*  -> temporal variation MATTERS
+  normal - shuffled : dAUPRC +0.0009 [+0.0002, +0.0016]*  -> temporal variation MATTERS
+
+h=60 min
+   condition    AUROC    AUPRC      PPV   Recall       F1
+      normal   0.9257   0.6323   0.3248   0.7975   0.4570
+    constant   0.9103   0.5895   0.2634   0.8132   0.3932
+    shuffled   0.9256   0.6319   0.3273   0.7948   0.4589
+  ------------------------------------------------------------------
+  normal - constant : dAUPRC +0.0427 [+0.0333, +0.0548]*  -> temporal variation MATTERS
+  normal - shuffled : dAUPRC +0.0004 [-0.0000, +0.0009]   -> no evidence it matters
+
+h=120 min
+   condition    AUROC    AUPRC      PPV   Recall       F1
+      normal   0.8435   0.5373   0.2826   0.7703   0.4095
+    constant   0.8221   0.4973   0.2359   0.7929   0.3588
+    shuffled   0.8434   0.5366   0.2832   0.7670   0.4095
+  ------------------------------------------------------------------
+  normal - constant : dAUPRC +0.0400 [+0.0295, +0.0535]*  -> temporal variation MATTERS
+  normal - shuffled : dAUPRC +0.0006 [+0.0000, +0.0014]*  -> temporal variation MATTERS
+
+################################################################################################
+# READING THIS
+################################################################################################
+
+  normal > constant, CI excludes zero
+      the temporal variation in lambda is doing real work; a tuned
+      constant retention rate would not reproduce it. Proceed to seeds
+      43 and 44.
+
+  normal ~ constant
+      D's advantage over C is a favourable average retention level, not
+      the conditioning. Running more seeds would not change that, and the
+      honest claim becomes the parameter reduction rather than the
+      mechanism.
+
+  normal > shuffled but normal ~ constant
+      lambda's variation matters only through its distribution, not its
+      alignment with the trajectory -- weaker than the intended claim.
+
+✓ Saved -> /content/drive/MyDrive/PediaCare-Net-v2/results/RQ2_models/tsl_gru/_intervention_tsl_gru__weighted_bce__none__any__s44.json  (7.5 min)
