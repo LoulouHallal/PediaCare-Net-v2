@@ -2,7 +2,7 @@
 
 **PediaCare-Net v2** is the reproducibility repository for a Master's thesis on early pediatric hypoglycemia prediction from continuous glucose monitoring, insulin, and carbohydrate time series. The repository contains the preprocessing pipeline, class-imbalance experiments, classical/deep/advanced baselines, the threshold-aware representation, the proposed **Trajectory-Scaled Light GRU (TSL-GRU)**, efficiency/deployment benchmarks, and the final XAI v3.2.1 workflow.
 
-> Patient data and trained checkpoints are intentionally not distributed here. See [`data/README.md`](data/README.md).
+> Patient data and trained checkpoints are intentionally not stored in this Git repository. The original MetaboNet data are obtained from the official MetaboNet portal, while optional thesis-derived arrays may be hosted separately subject to the source-data terms. See [`data/README.md`](data/README.md).
 
 ## Fastest verification for an instructor
 
@@ -53,6 +53,36 @@ PediaCare-Net-v2/
 ├── results/                # aggregate thesis tables only; no per-subject outputs
 └── research_experiments/   # archived pilots, diagnostics, patches, older XAI
 ```
+
+
+## Data access
+
+The code repository is intentionally separated from the large data artifacts used by the thesis. Two reproduction routes are supported:
+
+1. **Full preprocessing reproduction** — obtain the original MetaboNet data from the [official MetaboNet data portal](https://metabo-net.org/data), provide `metabonet_public.parquet` together with the historical pediatric cohort reference `metabonet_windows_pediatric.npz`, and rebuild the final causal windows with `src/build_windows.py`.
+2. **Faster experiment reproduction** — download the separately hosted thesis-derived data package and start from the already generated `windows_stride6.npz` / `windows_eval.npz` files.
+
+> **Thesis-derived data package:** `https://drive.google.com/drive/folders/16LMOLM-NG2w6ktN8AZbZaO2q4pkPjLsL`
+
+The pediatric cohort used throughout the thesis contains **244 subjects**. Historical cohort reconstruction confirmed the selection rule **`age_first < 18` years**. The legacy `metabonet_windows_pediatric.npz` file preserves the exact subject cohort used by the original experiments; `build_windows.py` uses those subject identifiers to select the corresponding records from `metabonet_public.parquet` before rebuilding the final causal representation.
+
+The derived-data package is expected to contain:
+
+```text
+metabonet_windows_pediatric.npz
+windows_stride6.npz
+windows_stride6_meta.json
+windows_eval.npz
+windows_eval_meta.json
+raw_treatment_stride6.npz
+patient_context_stride6.npz
+nadir_targets_stride6.npz
+features_stride6.npy
+cgm_timeline_metabonet.parquet
+cgm_timeline_metabonet_coverage.json
+```
+
+See [`data/README.md`](data/README.md) for the purpose of each file and [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) for the exact reproduction routes.
 
 ## Portable paths
 

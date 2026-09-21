@@ -28,28 +28,49 @@ PediaCare-Net smoke test: PASSED
 
 The smoke test verifies repository-relative paths, the historical 170/36/38 split logic on a synthetic 244-subject cohort, the actual 7-channel TSL-GRU implementation, its 15,974 trainable parameters, and a finite `(batch, 4)` forward pass for 60 timesteps.
 
-## 3. Install the full experiment environment and configure restricted data
+## 3. Install the full experiment environment and obtain the data
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Follow `data/README.md`. The default expected files are:
+### Original dataset
+
+Obtain MetaboNet from the official data portal:
+
+- https://metabo-net.org/data
+
+The preprocessing code expects the standardized raw file:
 
 ```text
 data/raw/metabonet_public.parquet
+```
+
+The historical pediatric cohort used by the thesis is preserved in:
+
+```text
 data/external/metabonet_windows_pediatric.npz
 ```
 
-They can instead remain anywhere on disk by setting `PEDIACARE_METABONET_RAW` and `PEDIACARE_METABONET_WINDOWS`.
+The cohort contains **244 subjects** and the recovered pediatric selection rule is **`age_first < 18` years**. In the released code, `metabonet_windows_pediatric.npz` supplies the exact cohort identifiers; the actual final preprocessing is rebuilt from `metabonet_public.parquet`.
 
-Check configured paths:
+The two files can remain anywhere on disk by setting `PEDIACARE_METABONET_RAW` and `PEDIACARE_METABONET_WINDOWS`. Check configured paths with:
 
 ```bash
 python src/config.py
 ```
 
-## 4. Rebuild causal windows
+### Optional thesis-derived data package
+
+For a faster reproduction route, the already generated thesis data artifacts can be downloaded separately:
+
+```text
+https://drive.google.com/drive/folders/16LMOLM-NG2w6ktN8AZbZaO2q4pkPjLsL
+```
+
+## 4. Choose a reproduction route
+
+### Route A — rebuild the causal windows from MetaboNet
 
 The thesis uses 60 observations (5 hours at 5-minute sampling), a 288-reading warm-up, causal expanding normalization, and subject-preserving windows. Build the training representation with stride 6 and the evaluation representation with stride 1:
 
@@ -59,6 +80,34 @@ python src/build_windows.py --stride 1 --tag eval
 ```
 
 The outputs are written to `data_derived/` by default and are intentionally ignored by Git.
+
+The data path is:
+
+```text
+metabonet_windows_pediatric.npz  -> exact 244 cohort IDs
+                                      +
+metabonet_public.parquet        -> raw longitudinal records
+                                      |
+                                      v
+                               src/build_windows.py
+                                      |
+                         +------------+------------+
+                         v                         v
+              windows_stride6.npz          windows_eval.npz
+```
+
+### Route B — start from the thesis-derived arrays
+
+Download the separate derived-data package and place at minimum the following files in `data_derived/`:
+
+```text
+windows_stride6.npz
+windows_stride6_meta.json
+windows_eval.npz
+windows_eval_meta.json
+```
+
+This route skips window rebuilding and proceeds directly to model/experiment execution. Additional files such as `raw_treatment_stride6.npz`, `patient_context_stride6.npz`, `nadir_targets_stride6.npz`, `features_stride6.npy`, and the CGM timeline files are used only by the corresponding experiment or diagnostic workflows.
 
 ## 5. Quick real-data execution check
 
